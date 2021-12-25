@@ -12,6 +12,14 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+@font-face {
+  font-family: 'font';
+  src: local('font'), url(./fonts/font.woff) format('woff');
+}
+
+.format-text {
+  font-family: 'font';
+}
 
 .App-header {
   background-color: #282c34;

@@ -1,6 +1,7 @@
 //Line 5 of chat-app/front/package.json  = will let the webpack (something that allows changes to code to be immediately rendered) proxy the API requests to the backend Express
 const http = require('http');
 const socketio = require('socket.io')
+const Filter = require('bad-words')
 
 const express = require('express');
 const app = express();
@@ -19,12 +20,16 @@ io.on('connection', (socket) => {
    socket.broadcast.emit('message', "A new user has joined!") //everyone apart from the newly connected socket will know that someone new has joiend 
 
    // ------Procedures based on if anyone wants to send a message ------- //
-   socket.on('send_message', (message) => { //message is the input from the form
-      io.emit('message', message)
-   })
-   socket.on('send_location',(pos) => {
-      console.log(pos)
+   socket.on('send_message', (message, callback) => { //message is the input from the form
+      const filter = new Filter()
+      filtered_message = filter.clean(message)
+      
+      io.emit('message', filtered_message)
+      callback() //the anon function that deals with an event acknowledgement (in this case it will say that the message was delivered)
+   }) 
+   socket.on('send_location',(pos,callback) => {
       io.emit('message', `One user is from https:google.com/maps?q=${pos.latitude},${pos.longitude}`)
+      callback()
    })
 
    // ------If and when a connected client disconnects---- //
