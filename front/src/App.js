@@ -14,6 +14,7 @@ function App() {
           console.log(message)
       })
 
+
       //takes into account everything that has been submitted into the html form 
       document.querySelector("#message-form").addEventListener('submit', (event) => { //submit gets confused with more and more buttons 
         event.preventDefault()
@@ -30,10 +31,12 @@ function App() {
         }
 
         navigator.geolocation.getCurrentPosition((position) => { //using a callback func to pass on res from geolocation api to server-side
+
           newSocket.emit('send_location', {latitude: position.coords.latitude, longitude: position.coords.longitude}, () => {
             console.log("Your location has been shared!") //event acknowledgement output
 
           })
+
         })
       })
 
@@ -43,6 +46,7 @@ function App() {
     
   
     return ( //<!--gets data from server side (express) and fetches it to client-side (react) for rendering-->
+
         <div className='format-text'>
           <h1>Chat App:</h1>
           <form id="message-form">
@@ -52,6 +56,7 @@ function App() {
           </form>
         <button id="location" className='format-text'>Send your Location</button>
         </div>
+
     );
   }
   
